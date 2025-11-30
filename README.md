@@ -71,3 +71,4 @@ Frontend runs on `http://localhost:5173`
 - SQLite database for development
 - CORS enabled for localhost:5173
 "# task-manager" 
+"# task-manager" 
