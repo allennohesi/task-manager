@@ -72,3 +72,4 @@ Frontend runs on `http://localhost:5173`
 - CORS enabled for localhost:5173
 "# task-manager" 
 "# task-manager" 
+"# task-manager" 
