@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .endpoint:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .method {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85em;
+            margin-right: 10px;
+            text-transform: uppercase;
+        }
+
+        .method.get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method.post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method.patch {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method.delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .endpoint-url {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .description {
+            margin: 15px 0;
+            color: #666;
+        }
+
+        .request-example, .response-example {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .example-label {
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .base-url {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .base-url strong {
+            color: #667eea;
+        }
+
+        .status-code {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-code.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-code.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .note strong {
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Task Manager API</h1>
+            <p>Complete API Documentation</p>
+        </div>
+
+        <div class="content">
+            <div class="base-url">
+                <strong>Base URL:</strong> <span id="baseUrl">http://localhost:8000</span>
+            </div>
+
+            <div class="section">
+                <h2>📖 Overview</h2>
+                <p>The Task Manager API is a RESTful API for managing tasks. It supports creating, reading, updating, and soft-deleting tasks. All endpoints return JSON data.</p>
+                
+                <div class="note">
+                    <strong>Note:</strong> Tasks with status 1 or 2 are considered deleted and are excluded from list and retrieve operations.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔗 Endpoints</h2>
+
+                <!-- List Tasks -->
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/api/tasks/</span>
+                    <div class="description">
+                        <strong>List all active tasks</strong> - Returns a list of all tasks that are not deleted (status != 1 and status != 2).
+                    </div>
+                    <div class="example-label">Response Example:</div>
+                    <div class="response-example">[
+  {
+    "id": 1,
+    "title": "Complete project",
+    "description": "Finish the task manager project",
+    "completed": false,
+    "status": 0,
+    "created_at": "2025-11-29T20:00:00Z",
+    "updated_at": "2025-11-29T20:00:00Z",
+    "is_deleted": false
+  }
+]</div>
+                    <div><span class="status-code success">200 OK</span></div>
+                </div>
+
+                <!-- Create Task -->
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/tasks/</span>
+                    <div class="description">
+                        <strong>Create a new task</strong> - Creates a new task with the provided data.
+                    </div>
+                    <div class="example-label">Request Body:</div>
+                    <div class="request-example">{
+  "title": "New Task",
+  "description": "Task description (optional)",
+  "completed": false
+}</div>
+                    <div class="example-label">Response Example:</div>
+                    <div class="response-example">{
+  "id": 2,
+  "title": "New Task",
+  "description": "Task description",
+  "completed": false,
+  "status": 0,
+  "created_at": "2025-11-29T20:05:00Z",
+  "updated_at": "2025-11-29T20:05:00Z",
+  "is_deleted": false
+}</div>
+                    <div><span class="status-code success">201 Created</span> <span class="status-code error">400 Bad Request</span></div>
+                </div>
+
+                <!-- Get Task -->
+                <div class="endpoint">
+                    <span class="method get">GET</span>
+                    <span class="endpoint-url">/api/tasks/{id}/</span>
+                    <div class="description">
+                        <strong>Retrieve a specific task</strong> - Returns the details of a single task by its ID.
+                    </div>
+                    <div class="example-label">Response Example:</div>
+                    <div class="response-example">{
+  "id": 1,
+  "title": "Complete project",
+  "description": "Finish the task manager project",
+  "completed": false,
+  "status": 0,
+  "created_at": "2025-11-29T20:00:00Z",
+  "updated_at": "2025-11-29T20:00:00Z",
+  "is_deleted": false
+}</div>
+                    <div><span class="status-code success">200 OK</span> <span class="status-code error">404 Not Found</span></div>
+                </div>
+
+                <!-- Update Task -->
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/tasks/{id}/</span>
+                    <div class="description">
+                        <strong>Update a task (full update)</strong> - Updates all fields of a task. All fields must be provided.
+                    </div>
+                    <div class="example-label">Request Body:</div>
+                    <div class="request-example">{
+  "title": "Updated Task",
+  "description": "Updated description",
+  "completed": true
+}</div>
+                    <div><span class="status-code success">200 OK</span> <span class="status-code error">400 Bad Request</span> <span class="status-code error">404 Not Found</span></div>
+                </div>
+
+                <!-- Partial Update Task -->
+                <div class="endpoint">
+                    <span class="method patch">PATCH</span>
+                    <span class="endpoint-url">/api/tasks/{id}/</span>
+                    <div class="description">
+                        <strong>Partially update a task</strong> - Updates only the provided fields. Other fields remain unchanged.
+                    </div>
+                    <div class="example-label">Request Body:</div>
+                    <div class="request-example">{
+  "completed": true
+}</div>
+                    <div><span class="status-code success">200 OK</span> <span class="status-code error">400 Bad Request</span> <span class="status-code error">404 Not Found</span></div>
+                </div>
+
+                <!-- Delete Task -->
+                <div class="endpoint">
+                    <span class="method delete">DELETE</span>
+                    <span class="endpoint-url">/api/tasks/{id}/</span>
+                    <div class="description">
+                        <strong>Soft delete a task</strong> - Sets the task status to 1 (deleted). The task is not permanently removed from the database.
+                    </div>
+                    <div><span class="status-code success">204 No Content</span> <span class="status-code error">404 Not Found</span></div>
+                </div>
+
+                <!-- Mark Completed -->
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/tasks/{id}/mark_completed/</span>
+                    <div class="description">
+                        <strong>Mark a task as completed</strong> - Sets the completed field to true for the specified task.
+                    </div>
+                    <div class="example-label">Response Example:</div>
+                    <div class="response-example">{
+  "id": 1,
+  "title": "Complete project",
+  "description": "Finish the task manager project",
+  "completed": true,
+  "status": 0,
+  "created_at": "2025-11-29T20:00:00Z",
+  "updated_at": "2025-11-29T20:10:00Z",
+  "is_deleted": false
+}</div>
+                    <div><span class="status-code success">200 OK</span> <span class="status-code error">404 Not Found</span></div>
+                </div>
+
+                <!-- Mark Incomplete -->
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-url">/api/tasks/{id}/mark_incomplete/</span>
+                    <div class="description">
+                        <strong>Mark a task as incomplete</strong> - Sets the completed field to false for the specified task.
+                    </div>
+                    <div class="example-label">Response Example:</div>
+                    <div class="response-example">{
+  "id": 1,
+  "title": "Complete project",
+  "description": "Finish the task manager project",
+  "completed": false,
+  "status": 0,
+  "created_at": "2025-11-29T20:00:00Z",
+  "updated_at": "2025-11-29T20:15:00Z",
+  "is_deleted": false
+}</div>
+                    <div><span class="status-code success">200 OK</span> <span class="status-code error">404 Not Found</span></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Task Model</h2>
+                <div class="endpoint">
+                    <div class="description">
+                        <strong>Task Fields:</strong>
+                        <ul style="margin-top: 10px; margin-left: 20px; color: #666;">
+                            <li><strong>id</strong> (integer, read-only) - Unique identifier</li>
+                            <li><strong>title</strong> (string, required) - Task title (max 200 characters)</li>
+                            <li><strong>description</strong> (string, optional) - Task description</li>
+                            <li><strong>completed</strong> (boolean, default: false) - Completion status</li>
+                            <li><strong>status</strong> (integer, default: 0) - Task status (0: Active, 1-2: Deleted)</li>
+                            <li><strong>created_at</strong> (datetime, read-only) - Creation timestamp</li>
+                            <li><strong>updated_at</strong> (datetime, read-only) - Last update timestamp</li>
+                            <li><strong>is_deleted</strong> (boolean, read-only) - Computed property indicating if task is deleted</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔧 Testing the API</h2>
+                <div class="note">
+                    <strong>Using cURL:</strong><br>
+                    <code style="background: #2d2d2d; color: #f8f8f2; padding: 5px 10px; border-radius: 3px; display: block; margin-top: 10px;">
+                        curl -X GET http://localhost:8000/api/tasks/
+                    </code>
+                </div>
+                <div class="note">
+                    <strong>Using JavaScript (fetch):</strong><br>
+                    <code style="background: #2d2d2d; color: #f8f8f2; padding: 5px 10px; border-radius: 3px; display: block; margin-top: 10px;">
+                        fetch('http://localhost:8000/api/tasks/')<br>
+                        &nbsp;&nbsp;.then(response => response.json())<br>
+                        &nbsp;&nbsp;.then(data => console.log(data));
+                    </code>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-detect base URL
+        const baseUrl = window.location.origin;
+        document.getElementById('baseUrl').textContent = baseUrl;
+    </script>
+</body>
+</html>
+
+
